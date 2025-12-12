@@ -1,0 +1,115 @@
+
+1. Подготовка к работе
+bash
+# Переключиться на основную ветку
+git checkout master
+
+# Забрать последние изменения с GitHub
+git pull origin master
+2. Создание ветки для новой задачи
+bash
+# Создать и переключиться на новую ветку
+git checkout -b тип/название-задачи
+
+# Примеры:
+git checkout -b feat/add-new-feature
+git checkout -b fix/login-bug
+git checkout -b docs/update-readme
+3. Внесение изменений
+bash
+# Проверить статус изменений
+git status
+
+# Посмотреть конкретные изменения в файлах
+git diff
+
+# Добавить файлы для коммита
+git add путь/к/файлу.java
+
+git add .  # Добавить все измененные файлы
+4. Создание коммита
+bash
+# Создать коммит с описанием
+git commit -m "тип: краткое описание"
+
+# Примеры:
+git commit -m "feat: добавил авторизацию пользователя"
+git commit -m "fix: исправил ошибку в расчетах"
+git commit -m "docs: обновил документацию API"
+
+5. Отправка на GitHub
+bash
+# Отправить ветку на GitHub (в первый раз)
+git push -u origin имя-ветки
+
+# Последующие отправки в эту же ветку
+git push
+6. Создание Pull Request
+1.	Перейдите на GitHub в вашем репозитории
+2.	Нажмите "Compare & pull request"
+3.	Заполните описание и создайте PR
+4.	Дождитесь ревью (если работаете в команде)
+5.	Нажмите "Merge pull request"
+7. Завершение работы
+bash
+# Вернуться на основную ветку
+git checkout master
+
+# Обновить локальную версию
+git pull origin master
+
+# Удалить локальную ветку (после мержа)
+git branch -d имя-ветки
+
+# Обновить информацию о ветках
+git fetch --prune
+
+
+$newFirstPart = "1"
+
+Get-ChildItem -Directory | Where-Object { $_.Name -match '^\d+-\d+-\d{4}$' } | ForEach-Object {
+    $oldName = $_.Name
+    $parts = $oldName -split '-'
+
+    $parts[0] = $newFirstPart
+
+    $newName = $parts -join '-'
+    Rename-Item -Path $_.FullName -NewName $newName
+    Write-Host "Переименовано: $oldName -> $newName"
+}
+
+# Скомпилированные классы
+*.class
+*.war
+*.ear
+*.jar
+
+# Файлы сборки Maven
+target/
+build/
+dependency-reduced-pom.xml
+
+# Файлы логов
+*.log
+
+# Файлы операционных систем
+.DS_Store
+Thumbs.db
+
+# Файлы IDE (IntelliJ)
+
+
+# Служебные файлы
+release/
+
+
+
+# Qodana
+qodana.yaml
+.qodana/
+
+git init
+git add .
+git commit -m "Initial commit: complete project structure"
+git remote add origin https://github.com/Fossa25/GORIZONT_GAI_NEW.git
+git push -u origin main

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="716.0" prefWidth="1034.0" style="-fx-background-color: #eef2f3;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proburok.GeomexCOD">
+
+    <children>
+        <TextField fx:id="nomer" editable="false" layoutX="252.0" layoutY="120.0" prefHeight="43.0" prefWidth="193.0" promptText="№ ПАСПОРТА">
+            <font>
+                <Font name="Verdana" size="14.0" />
+            </font>
+        </TextField>
+        <Button fx:id="singUpButtun" layoutX="830.0" layoutY="555.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="161.0" style="-fx-background-color: #aa9455; -fx-background-radius: 20px;" text="Сохранить данные" textFill="WHITE">
+            <font>
+                <Font name="Verdana" size="14.0" />
+            </font>
+        </Button>
+        <ComboBox fx:id="gorbox" editable="true" layoutX="252.0" layoutY="50.0" prefHeight="43.0" prefWidth="193.0" promptText="ГОРИЗОНТ" />
+
+        <Accordion layoutX="479.0" layoutY="436.0" />
+        <TextField fx:id="katigoria" editable="false" layoutX="252.0" layoutY="190.0" prefHeight="43.0" prefWidth="193.0" promptText="ГЕОЛГ. КЛАСС УСТОЙЧИВОСТИ">
+            <font>
+                <Font name="Verdana" size="14.0" />
+            </font>
+        </TextField>
+        <TextField fx:id="privazka" editable="false" layoutX="506.0" layoutY="120.0" prefHeight="45.0" prefWidth="484.0" promptText="ПРИВЯЗКА">
+         <font>
+            <Font name="Verdana" size="14.0" />
+         </font></TextField>
+      <TextField fx:id="cehen" editable="false" layoutX="251.0" layoutY="258.0" prefHeight="43.0" prefWidth="193.0" promptText="СЕЧЕНИЕ">
+         <font>
+            <Font name="Verdana" size="14.0" />
+         </font>
+      </TextField>
+        <ComboBox fx:id="namebox" editable="true" layoutX="505.0" layoutY="50.0" prefHeight="43.0" prefWidth="484.0" promptText="НАЗВАНИЕ ГОРНОЙ ВЫРАБОТКИ" />
+        <Label layoutX="493.0" layoutY="322.0" prefHeight="43.0" prefWidth="254.0" text="ГРАФИЧЕСКИЕ МАТЕРИАЛЫ" wrapText="true">
+            <font>
+                <Font name="Verdana" size="14.0" />
+            </font>
+        </Label>
+      <TextArea fx:id="opisanie" editable="false" layoutX="506.0" layoutY="190.0" prefHeight="43.0" prefWidth="484.0" promptText="ГЕОЛОГИЧЕСКОЕ ОПИСАНИЕ">
+         <font>
+            <Font name="Verdana" size="14.0" />
+         </font>
+      </TextArea>
+      <ComboBox fx:id="krepbox" editable="true" layoutX="505.0" layoutY="528.0" prefHeight="43.0" prefWidth="484.0" visible="false" visibleRowCount="3" />
+      <Label fx:id="krep" layoutX="505.0" layoutY="459.0" prefHeight="43.0" prefWidth="254.0" text="ВЫБОР ИСПОЛЬЗУЕМОЙ КРЕПИ" visible="false" wrapText="true">
+         <font>
+            <Font name="Verdana" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="dlina" editable="false" layoutX="506.0" layoutY="258.0" prefHeight="43.0" prefWidth="161.0" promptText="ДЛИНА ВЫРАБОТКИ">
+         <font>
+            <Font name="Verdana" size="14.0" />
+         </font>
+      </TextField>
+      <AnchorPane layoutX="249.0" layoutY="374.0" prefHeight="85.0" prefWidth="742.0" style="-fx-background-color: #ffffff; -fx-background-radius: 2px; -fx-border-color: #a2a2a2;">
+         <children>
+            <Label layoutX="20.0" layoutY="18.0" prefHeight="43.0" prefWidth="130.0" text="План выработки">
+               <font>
+                  <Font name="Verdana" size="14.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="PlanVKLNe" fitHeight="45.0" fitWidth="45.0" layoutX="174.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@assets/silkaN.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="PlanVKL" fitHeight="45.0" fitWidth="45.0" layoutX="174.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@assets/silkaA.jpg" />
+               </image>
+            </ImageView>
+            <Label layoutX="251.0" layoutY="18.0" prefHeight="43.0" prefWidth="155.0" text="Поперечный разрез">
+               <font>
+                  <Font name="Verdana" size="14.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="PoperVKL" fitHeight="45.0" fitWidth="45.0" layoutX="426.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@assets/silkaA.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="PoperVKLNe" fitHeight="45.0" fitWidth="45.0" layoutX="426.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@assets/silkaN.jpg" />
+               </image>
+            </ImageView>
+            <Label layoutX="498.0" layoutY="18.0" prefHeight="43.0" prefWidth="155.0" text="Продольный разрез">
+               <font>
+                  <Font name="Verdana" size="14.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="ProdolVKL" fitHeight="45.0" fitWidth="45.0" layoutX="673.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@assets/silkaA.jpg" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="ProdolVKLNe" fitHeight="45.0" fitWidth="45.0" layoutX="673.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@assets/silkaN.jpg" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="-2.0" prefHeight="716.0" prefWidth="200.0" style="-fx-background-color: #ffffff;">
+         <children>
+            <ImageView fitHeight="101.0" fitWidth="200.0" layoutX="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@assets/IMG_4772.JPG" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="instr" fitHeight="61.0" fitWidth="58.0" layoutX="25.0" layoutY="628.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@assets/instr.jpg" />
+               </image>
+            </ImageView>
+            <TextField fx:id="idi" layoutX="25.0" layoutY="69.0" prefHeight="43.0" prefWidth="139.0" promptText="idi">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <TextArea fx:id="primhanie" editable="true" layoutX="25.0" layoutY="120.0" prefHeight="73.0" prefWidth="139.0" promptText="ПРИМЕЧАНИЕ" wrapText="true">
+               <font>
+                  <Font name="Verdana" size="14.0" />
+               </font>
+            </TextArea>
+         </children>
+      </AnchorPane>
+      <TextArea fx:id="tfopis" layoutX="249.0" layoutY="491.0" prefHeight="107.0" prefWidth="454.0" promptText="ГЕОМЕХАНИЧЕСКОЕ ОБОСНОВАНИЕ(УКАЗАНИЕ)" wrapText="true">
+         <font>
+            <Font name="Verdana" size="14.0" />
+         </font>
+      </TextArea>
+      <TextField fx:id="nomer1" editable="false" layoutX="731.0" layoutY="258.0" prefHeight="43.0" prefWidth="168.0" promptText="ТИПОВОЙ ПАСПОРТ">
+         <font>
+            <Font name="Verdana" size="14.0" />
+         </font>
+      </TextField>
+      <ImageView fx:id="TP" fitHeight="45.0" fitWidth="52.0" layoutX="944.0" layoutY="257.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/TP.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="dokumGeolog" fitHeight="61.0" fitWidth="58.0" layoutX="532.0" layoutY="630.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/iconGeolog.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="dokumGeolog11" fitHeight="61.0" fitWidth="58.0" layoutX="632.0" layoutY="630.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/albom.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="tabl" fitHeight="61.0" fitWidth="58.0" layoutX="432.0" layoutY="630.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/BDA.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="73.0" fitWidth="207.0" layoutY="203.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/ProhodN.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="73.0" fitWidth="207.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/GeologN.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="73.0" fitWidth="207.0" layoutY="422.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/GeomexA.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="73.0" fitWidth="207.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/MarN.jpg" />
+         </image>
+      </ImageView>
+    </children>
+</AnchorPane>
