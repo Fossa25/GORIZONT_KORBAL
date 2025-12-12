@@ -34,7 +34,7 @@ public class SingUpController {
 
     @FXML
     void initialize() {
-        singUpContri.getItems().addAll("Администратор", "Проходчик", "Геолог","Геомеханик");
+        singUpContri.getItems().addAll("Администратор", "Проходчик", "Геолог","Геомеханик","Маркшейдер");
 
         singUpButtun.setOnAction(actionEvent -> {
 

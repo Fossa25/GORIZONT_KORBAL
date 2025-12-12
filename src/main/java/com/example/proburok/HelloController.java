@@ -30,12 +30,12 @@ public class HelloController {
     @FXML
     void initialize() {
 
-        loginSingUpButton.setVisible(true);
-        loginSingUpButton1.setVisible(true);
-        loginSingUpButton2.setVisible(true);
-        loginSingUpButton3.setVisible(true);
-        loginSingUpButton4.setVisible(true);
-        loginSingUpButton5.setVisible(true);
+        loginSingUpButton.setVisible(false);
+        loginSingUpButton1.setVisible(false);
+        loginSingUpButton2.setVisible(false);
+        loginSingUpButton3.setVisible(false);
+        loginSingUpButton4.setVisible(false);
+        loginSingUpButton5.setVisible(false);
 
         authSiginButton.setOnAction(actionEvent -> {
             String loginText = login_fild.getText().trim();
@@ -85,7 +85,7 @@ public class HelloController {
             }
             if (user.getLocation().equals("Маркшейдер")) {
                 loginSingUpButton.getScene().getWindow().hide();
-                openNewScene("/com/example/proburok/Geomex.fxml");
+                openNewScene("/com/example/proburok/Marheder.fxml");
 
 
             }
