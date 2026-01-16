@@ -1,9 +1,16 @@
-package com.example.proburok;
+package com.example.proburok.MQ;
 
+import com.example.proburok.New_Class.Baza;
+import com.example.proburok.New_Class.Baza_Geolg;
+import com.example.proburok.job_User.User;
+import com.example.proburok.job.Configs;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.util.List;
+
+import java.util.ArrayList;
 
 public class DatabaseHandler extends Configs {
     public Connection getDbConnection() throws SQLException {  //Этот метод создает и возвращает соединение с базой данных MySQL.
@@ -62,17 +69,18 @@ public class DatabaseHandler extends Configs {
             throw new RuntimeException("Ошибка обновления данных: " + e.getMessage(), e);
         }
     }
-    public void DobavlenieMARH(String prim,String privaz,String gorizont, String nazvanie) {
-        String query = "UPDATE " + Const.BAZA_TABLE + " SET " + Const.BAZA_PRIM + " = ?, "+Const.BAZA_PRIVIZKA + " = ? "
+    public void DobavlenieMARH(String prim,String dlina,String privaz,String gorizont, String nazvanie) {
+        String query = "UPDATE " + Const.BAZA_TABLE + " SET " + Const.BAZA_PRIM + " = ?, "+  Const.BAZA_DLINA + " = ?, "+Const.BAZA_PRIVIZKA + " = ? "
                 + "WHERE " + Const.BAZA_GORIZONT + " = ? AND " + Const.BAZA_NAZVANIE + " = ?";
 
         try (Connection connection = getDbConnection();
              PreparedStatement prSt = connection.prepareStatement(query)) {
 
             prSt.setString(1, prim);
-            prSt.setString(2, privaz);
-            prSt.setString(3, gorizont);
-            prSt.setString(4, nazvanie);
+            prSt.setString(2, dlina);
+            prSt.setString(3, privaz);
+            prSt.setString(4, gorizont);
+            prSt.setString(5, nazvanie);
 
             prSt.executeUpdate();
         } catch (SQLException e) {
@@ -114,6 +122,98 @@ public class DatabaseHandler extends Configs {
             throw new RuntimeException("Ошибка обновления данных: " + e.getMessage(), e);
         }
     }
+
+
+    public void saveAllRows(List<Baza_Geolg> rows, String nomPas) {
+        String insert = "INSERT INTO " + Const.GEO_TABLE + "(" + Const.GEO_NOMER +
+                "," + Const.GEO_OT + "," + Const.GEO_GO
+                + "," + Const.GEO_KATIGORII+ "," + Const.GEO_OPISANIE  + "," + Const.GEO_INTERVAL +  ")" + "VALUES(?,?,?,?,?,?)";
+        try (Connection connection = getDbConnection();
+             PreparedStatement statement = connection.prepareStatement(insert)) {
+
+            // Начинаем транзакцию для более быстрой вставки
+            connection.setAutoCommit(false);
+
+            for (Baza_Geolg row : rows) {
+                statement.setString(1, nomPas);
+
+                statement.setString(2, row.getcolumnOT());
+                statement.setString(3, row.getcolumnDO());
+                statement.setString(4, row.getcolumnKLASS());
+                statement.setString(5, row.getcolumnOPIS());
+                statement.setString(6, row.getcolumnOTDO());
+                statement.addBatch(); // Добавляем в пакет
+            }
+
+            // Выполняем пакетную вставку
+            int[] result = statement.executeBatch();
+            connection.commit(); // Подтверждаем транзакцию
+
+            System.out.println("Сохранено " + result.length + " строк в БД");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public List<Baza_Geolg> getAllRows(String nomer) {
+        List<Baza_Geolg> rows = new ArrayList<>();
+        String select = "SELECT * FROM " + Const.GEO_TABLE + " WHERE " +
+                Const.GEO_NOMER + "=?";
+
+        try (Connection connection =  getDbConnection();
+             PreparedStatement prSt = connection.prepareStatement(select)) {  // что вставляем в БД
+            prSt.setString(1, nomer);
+
+            try (ResultSet resSet = prSt.executeQuery()) { //prSt.executeQuery-получаем даные из БД
+                while  (resSet.next()) {
+                    Baza_Geolg row = new Baza_Geolg();
+
+                    row.setcolumnOT(resSet.getString(Const.GEO_OT));
+                    row.setcolumnDO(resSet.getString(Const.GEO_GO));
+                    row.setcolumnKLASS(resSet.getString(Const.GEO_KATIGORII));
+                    row.setcolumnOPIS(resSet.getString(Const.GEO_OPISANIE));
+                    row.setcolumnOTDO(resSet.getString(Const.GEO_INTERVAL));
+                    rows.add(row);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rows;
+    }
+    public void deleteRowsWithCheck(String nomPas) {
+        // Сначала проверяем, есть ли такие данные
+        String checkSql = "SELECT COUNT(*) FROM " + Const.GEO_TABLE +
+                " WHERE " + Const.GEO_NOMER + " = ?";
+
+        String deleteSql = "DELETE FROM " + Const.GEO_TABLE +
+                " WHERE " + Const.GEO_NOMER + " = ?";
+
+        try (Connection connection = getDbConnection()) {
+            // Проверка
+            try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
+                checkStmt.setString(1, nomPas);
+                ResultSet rs = checkStmt.executeQuery();
+
+                if (rs.next() && rs.getInt(1) == 0) {
+                    System.out.println("Данные для удаления не найдены");
+                    return;
+                }
+            }
+
+            // Удаление
+            try (PreparedStatement deleteStmt = connection.prepareStatement(deleteSql)) {
+                deleteStmt.setString(1, nomPas);
+                int rowsDeleted = deleteStmt.executeUpdate();
+                System.out.println("Удалено " + rowsDeleted + " строк");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Ошибка: " + e.getMessage());
+        }
+    }
+
     //Добавление регистрации в юзер
     public void singUpUser(User user) {
         String insert = "INSERT INTO " + Const.USER_TABLE + "(" + Const.USER_FIRSTNAME +
@@ -221,6 +321,7 @@ public class DatabaseHandler extends Configs {
         }
         return bazas;
     }
+
     public Baza danii(String gor, String name) {
         String select = "SELECT * FROM " + Const.BAZA_TABLE + " WHERE " +
                 Const.BAZA_GORIZONT + "=? AND " + Const.BAZA_NAZVANIE + "=?"; // "SELECT * FROM " + Const.USER_TABLE  выбрать всё из этой базы  " WHERE " + Const.USER_USERNAME + "=? где конст равен чему то

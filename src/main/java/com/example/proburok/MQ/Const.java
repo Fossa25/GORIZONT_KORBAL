@@ -1,4 +1,4 @@
-package com.example.proburok;
+package com.example.proburok.MQ;
 
 public class Const {
     public static final String BAZA_TABLE="baza";
@@ -19,6 +19,7 @@ public class Const {
     public static final String BAZA_NAZVANIE_BD="НАЗВАНИЕ";
     public static final String BAZA_IDI="IDI";
     public static final String BAZA_TFOPISANIE="ТФ_ОПИСАНИЕ";
+
     public static final String USER_TABLE="users";
     public static final String USER_ID="idusers";
     public static final String USER_FIRSTNAME="firstname";
@@ -31,4 +32,12 @@ public class Const {
     public static final String BAZA_WID = "ШИРИНА";
     public static final String BAZA_HID = "ВЫСОТА";
     public static final String BAZA_SLOI = "СЛОИСТОСТЬ";
+
+    public static final String GEO_TABLE="baza_geo";
+    public static final String GEO_NOMER="НОМЕР";
+    public static final String GEO_INTERVAL="ИНТЕРВАЛ";
+    public static final String GEO_OT="ОТ";
+    public static final String GEO_GO="ДО";
+    public static final String GEO_KATIGORII="КЛАСС";
+    public static final String GEO_OPISANIE="ОПИСАНИЕ";
 }

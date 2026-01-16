@@ -1,6 +1,7 @@
-package com.example.proburok;
+package com.example.proburok.job;
 
 
+import com.example.proburok.New_Class.ConfigLoader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -199,7 +200,7 @@ public void openNewScene(String Window){
             image3.setVisible(false); image4.setVisible(true);
         });}
 
-    void showAlert(String message) {
+    public void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Внимание!");
         alert.setHeaderText(null);

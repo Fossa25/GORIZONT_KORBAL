@@ -1,9 +1,12 @@
-package com.example.proburok;
+package com.example.proburok.job;
 
 import java.sql.Date;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
+import com.example.proburok.MQ.DatabaseHandler;
+import com.example.proburok.New_Class.Probnik;
+import com.example.proburok.New_Class.Probnik1;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -15,7 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
 
-public class ProhodCOD extends Configs{
+public class ProhodCOD extends Configs {
     @FXML private DatePicker data;
     @FXML private ComboBox<String> sehenbox;
     @FXML private TextField gorizont;

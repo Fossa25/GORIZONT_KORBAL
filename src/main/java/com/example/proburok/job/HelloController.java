@@ -1,6 +1,8 @@
-package com.example.proburok;
+package com.example.proburok.job;
 
+import com.example.proburok.MQ.DatabaseHandler;
 import com.example.proburok.animation.Shake;
+import com.example.proburok.job_User.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,12 +32,12 @@ public class HelloController {
     @FXML
     void initialize() {
 
-        loginSingUpButton.setVisible(false);
-        loginSingUpButton1.setVisible(false);
-        loginSingUpButton2.setVisible(false);
-        loginSingUpButton3.setVisible(false);
-        loginSingUpButton4.setVisible(false);
-        loginSingUpButton5.setVisible(false);
+        loginSingUpButton.setVisible(true);
+        loginSingUpButton1.setVisible(true);
+        loginSingUpButton2.setVisible(true);
+        loginSingUpButton3.setVisible(true);
+        loginSingUpButton4.setVisible(true);
+        loginSingUpButton5.setVisible(true);
 
         authSiginButton.setOnAction(actionEvent -> {
             String loginText = login_fild.getText().trim();

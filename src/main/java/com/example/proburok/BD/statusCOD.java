@@ -1,5 +1,7 @@
-package com.example.proburok;
+package com.example.proburok.BD;
 
+import com.example.proburok.New_Class.Baza;
+import com.example.proburok.MQ.DatabaseHandler;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,11 +10,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 public class statusCOD {

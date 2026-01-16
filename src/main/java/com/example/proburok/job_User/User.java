@@ -1,4 +1,4 @@
-package com.example.proburok;
+package com.example.proburok.job_User;
 
 public class User {
 

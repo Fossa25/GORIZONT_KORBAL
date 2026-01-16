@@ -1,4 +1,4 @@
-package com.example.proburok;
+package com.example.proburok.New_Class;
 
 public class Probnik {
     private String virobotka;

@@ -1,29 +1,20 @@
-package com.example.proburok;
+package com.example.proburok.job;
 
+import com.example.proburok.New_Class.Baza;
+import com.example.proburok.MQ.DatabaseHandler;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.stage.FileChooser;
-import javafx.stage.Window;
-import javafx.util.Duration;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.sql.Date;
-import java.time.DateTimeException;
-import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class MarhederCOD extends Configs{
+public class MarhederCOD extends Configs {
 
 
     @FXML private TextField nomer;
@@ -54,6 +45,8 @@ public class MarhederCOD extends Configs{
     @FXML private ComboBox<String> namebox;
     @FXML private TextField privazka;
     @FXML private Button singUpButtun;
+    @FXML private TextField dlina;
+    List<String> soprigenii = Arrays.asList("11","12","13","14","15");
     @FXML
     void initialize() {
         setupTooltips(planVNS,PlanVKL,PlanVKLNe,planobnov,
@@ -112,7 +105,7 @@ public class MarhederCOD extends Configs{
             getPrimNext();
             String selectedGor = gorbox.getValue();
             String selectedName = namebox.getValue();
-
+            String dlinaValue = dlina.getText();
             String selectPrivizka = privazka.getText();
             try {
                 // Проверка полей по очереди
@@ -120,6 +113,10 @@ public class MarhederCOD extends Configs{
                 if (selectedGor == null || selectedGor.isEmpty()) {errors.append("- Не выбран горизонт\n");}
                 if (selectedName == null || selectedName.isEmpty()) {errors.append("- Не выбрано название выработки\n");}
                 if (selectPrivizka == null || selectPrivizka.isEmpty()) {errors.append("- Не заполнена привязка\n");}
+                if (soprigenii.contains(idi.getText())) {
+                    dlinaValue = "-";
+                    dlina.setVisible(false);
+                }else {  if (dlinaValue == null || dlinaValue.isEmpty()) {errors.append("- Не заполнена длина выработки\n");}}
                 if (poperVNS.isVisible() || poperVNSNE.isVisible()) {
                     errors.append("- Не внесён поперечный разрез\n");
                 }
@@ -136,7 +133,7 @@ public class MarhederCOD extends Configs{
 
                 // Все данные валидны - выполняем сохранение
                 String prim = "Требуется геологическое описание";
-              new DatabaseHandler().DobavlenieMARH(prim,selectPrivizka, selectedGor, selectedName);
+              new DatabaseHandler().DobavlenieMARH(prim,dlinaValue,selectPrivizka, selectedGor, selectedName);
                 ohistka();
                 // gorbox.setValue(null);
             }  catch (Exception e) {
@@ -153,7 +150,30 @@ public class MarhederCOD extends Configs{
             if (poluh != null) {
                 nomer.setText(poluh.getNOMER());
                 idi.setText(poluh.getIDI());
-                privazka.setText(poluh.getPRIVIZKA());
+
+
+                if (poluh.getPRIVIZKA() != null) {
+                    privazka.setText(poluh.getPRIVIZKA());
+                } else {
+                    privazka.setText("");
+                }
+
+
+                if (poluh.getDLINA() != null) {
+                    if (soprigenii.contains(idi.getText())) {
+                        dlina.setVisible(false);
+                    }else {dlina.setVisible(true);}
+
+                    dlina.setText(poluh.getDLINA());
+                } else {
+                    if (soprigenii.contains(idi.getText())) {
+                        dlina.setText("-")  ;
+                        dlina.setVisible(false);}
+                    else{ dlina.setVisible(true);
+                        dlina.setText("");}
+
+                }
+
                 setupImageHandlers();
                 proverkaImage(Put + "/" + nomer.getText() + "/" + "План", planVNS, planVNSNE, PlanVKL, PlanVKLNe, planobnov);
                 proverkaImage(Put + "/" + nomer.getText() + "/" + "Поперечный", poperVNS, poperVNSNE, PoperVKL, PoperVKLNe, poperobnov);
@@ -175,7 +195,7 @@ public class MarhederCOD extends Configs{
         nomer.setText("");
         namebox.setValue("");
         privazka.setText("");
-
+        dlina.setText("");
         idi.setText("");
         PlanVKL.setVisible(false);PlanVKLNe.setVisible(true);planobnov.setVisible(false);
         planVNS.setVisible(false); planVNSNE.setVisible(true);

@@ -4,6 +4,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -11,8 +13,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="948.0" prefWidth="1407.0" style="-fx-background-color: #eef2f3;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proburok.GeologCOD">
-
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1122.0" prefWidth="1395.0" style="-fx-background-color: #eef2f3;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proburok.job.GeologCOD">
 
     <children>
         <TextField fx:id="privazka" editable="false" layoutX="942.0" layoutY="50.0" prefHeight="43.0" prefWidth="424.0" promptText="ПРИВЯЗКА">
@@ -25,7 +26,22 @@
                 <Font size="14.0" />
             </font>
         </TextField>
-        <Button fx:id="singUpButtun" layoutX="1065.0" layoutY="849.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="161.0" style="-fx-background-color: #aa9455; -fx-background-radius: 20px;" text="Сохранить данные" textFill="WHITE">
+
+        <TableView fx:id="dataTable" editable="true" layoutX="359.0" layoutY="944.0" prefHeight="150" prefWidth="600">
+            <columns>
+                <TableColumn fx:id="column1" prefWidth="93.0" text="№ Интервала" />
+                <TableColumn fx:id="column2" prefWidth="100.0" text="НАЧАЛО" />
+                <TableColumn fx:id="column3" prefWidth="100.0" text="КОНЕЦ" />
+                <TableColumn fx:id="column4" prefWidth="150.0" text="ГЕОЛГ. КЛАСС" />
+            <TableColumn fx:id="column5" prefWidth="156.0" text="ОПИСАНИЕ" />
+            <TableColumn fx:id="column6" prefWidth="156.0" text="OTDO" visible="false" />
+            </columns>
+        </TableView>
+
+
+
+
+        <Button fx:id="singUpButtun" layoutX="1065.0" layoutY="769.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="161.0" style="-fx-background-color: #aa9455; -fx-background-radius: 20px;" text="Сохранить данные" textFill="WHITE">
             <font>
                 <Font name="Verdana" size="14.0" />
             </font>
@@ -112,7 +128,7 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="948.0" prefWidth="202.0" style="-fx-background-color: #ffffff;">
+      <AnchorPane layoutY="-6.0" prefHeight="1122.0" prefWidth="203.0" style="-fx-background-color: #ffffff;">
          <children>
               <ImageView fitHeight="101.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                   <image>
@@ -170,6 +186,36 @@
       <ImageView fx:id="tabl" fitHeight="61.0" fitWidth="58.0" layoutX="521.0" layoutY="871.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@assets/BDA.jpg" />
+         </image>
+      </ImageView>
+      <TextField fx:id="DO" layoutX="1206.0" layoutY="951.0" prefHeight="43.0" prefWidth="91.0" promptText="ДО">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="OT" layoutX="1065.0" layoutY="951.0" prefHeight="43.0" prefWidth="91.0" promptText="ОТ">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </TextField>
+      <ImageView fx:id="PLUS" fitHeight="45.0" fitWidth="45.0" layoutX="1007.0" layoutY="1034.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/dobavlenieAS.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="MINUS" fitHeight="45.0" fitWidth="45.0" layoutX="1079.0" layoutY="1034.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/dobavlenieNS.jpg" />
+         </image>
+      </ImageView>
+      <TextField fx:id="OSTATOK" layoutX="1226.0" layoutY="1035.0" prefHeight="43.0" prefWidth="91.0" promptText="SUM">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </TextField>
+      <ImageView fx:id="obnv" fitHeight="45.0" fitWidth="45.0" layoutX="1146.0" layoutY="1034.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/izmenS.jpg" />
          </image>
       </ImageView>
     </children>
