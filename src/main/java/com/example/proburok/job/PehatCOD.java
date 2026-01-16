@@ -1,12 +1,13 @@
-package com.example.proburok;
+package com.example.proburok.job;
 
+import com.example.proburok.New_Class.Baza;
+import com.example.proburok.MQ.DatabaseHandler;
+import com.example.proburok.New_Class.TemplateResource;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -19,7 +20,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -28,7 +28,6 @@ import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class PehatCOD extends Configs {
@@ -1012,13 +1011,7 @@ public class PehatCOD extends Configs {
 
     }
 
-    void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Внимание!");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
 
     private void handleError(Exception e) {
         e.printStackTrace();

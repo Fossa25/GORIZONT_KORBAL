@@ -1,36 +1,22 @@
-package com.example.proburok;
+package com.example.proburok.job_User;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import com.example.proburok.MQ.DatabaseHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class SingUpController {
 
-    @FXML
-    private ResourceBundle resources;
+    @FXML private TextField login_fild;
 
-    @FXML
-    private URL location;
+    @FXML private PasswordField password_fild;
 
-    @FXML
-    private TextField login_fild;
+    @FXML private Button singUpButtun;
 
-    @FXML
-    private PasswordField password_fild;
+    @FXML private ComboBox<String> singUpContri;
 
-    @FXML
-    private Button singUpButtun;
+    @FXML private TextField singUpLastname;
 
-    @FXML
-    private ComboBox<String> singUpContri;
-
-
-    @FXML
-    private TextField singUpLastname;
-
-    @FXML
-    private TextField singUpName;
+    @FXML private TextField singUpName;
 
     @FXML
     void initialize() {

@@ -1,5 +1,7 @@
-package com.example.proburok;
+package com.example.proburok.job;
 
+import com.example.proburok.New_Class.Baza;
+import com.example.proburok.MQ.DatabaseHandler;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,18 +13,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.sl.usermodel.PictureData;
-import org.apache.poi.util.IOUtils;
-import org.apache.poi.util.Units;
-import org.apache.poi.xwpf.usermodel.*;
 
-import java.awt.*;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.text.ParseException;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -267,13 +259,7 @@ public class GeomexCOD extends Configs {
 
     }
 
-    void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Внимание!");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
 
      void proverkaImageGeolg(String imagePath,ImageView VKL,ImageView VKLNE) {
         File folder = new File(imagePath);
