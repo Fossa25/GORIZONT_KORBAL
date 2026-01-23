@@ -1,22 +1,23 @@
 package com.example.proburok.New_Class;
 
-//для создания внести и выдать данные нажми alt+insert
 public class Baza_Geolg {
-    private int  idG;           // Уникальный идентификатор (автоинкремент в БД)
+    private int  idG;
     private String NOM_PAS;
     private String columnOTDO;
-    private String columnOT;   // Значение из 1-го столбца
-    private String columnDO;   // Значение из 2-го столбца
-    private String columnKLASS;   // Значение из 3-го столбца
+    private String columnOT;
+    private String columnDO;
+    private String columnKLASS;
     private String columnOPIS;
+    private String columnLIST;
 
-    public Baza_Geolg(String col1, String col2, String col3, String col4, String col5, String col6) {
+    public Baza_Geolg(String col1, String col2, String col3, String col4, String col5, String col6, String col7) {
         this.NOM_PAS = col1;
         this.columnOTDO = col2;
         this.columnOT = col3;
         this.columnDO = col4;
         this.columnKLASS = col5;
         this.columnOPIS = col6;
+        this.columnLIST = col7;
     }
     @Override
     public String toString() {
@@ -28,8 +29,6 @@ public class Baza_Geolg {
     public void setidG(int  idG) {
         this.idG = idG;
     }
-
-
     public String getNOM_PAS() {
         return NOM_PAS;
     }
@@ -69,5 +68,11 @@ public class Baza_Geolg {
         this. columnOPIS =  columnOPIS;
     }
 
+    public String getcolumnLIST() {
+        return  columnLIST;
+    }
+    public void setcolumnLIST(String  columnLIST) {
+        this. columnLIST =  columnLIST;
+    }
 
 }

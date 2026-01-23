@@ -68,8 +68,13 @@ public class Configs {
         geomexandpas.setOnMouseClicked(mouseEvent -> {OpenDok(Put_albom,"АЛЬБОМ ТИПОВЫХ ПАСПОРТОВ КРЕПЛЕНИЯ_");});
     }else{
     geomexandpas.setOnMouseClicked(mouseEvent -> OpenDok(Put_texusovia,"Технологические условия_"));}
-}
-public void openNewScene(String Window){
+    }
+    public void validateField(String value, String fieldName, StringBuilder errors) {
+        if (value == null || value.trim().isEmpty()) {
+            errors.append("- Не заполнено поле ").append(fieldName).append("\n");
+        }
+    }
+    public void openNewScene(String Window){
         // Загрузка нового окна
         FXMLLoader loader = new FXMLLoader();
         // Проверка пути к FXML-файлу
@@ -348,7 +353,7 @@ public void openNewScene(String Window){
                 return false;
             }
         }
-
         return true;
     }
+
 }

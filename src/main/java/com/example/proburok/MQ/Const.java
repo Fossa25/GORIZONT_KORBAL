@@ -40,4 +40,5 @@ public class Const {
     public static final String GEO_GO="ДО";
     public static final String GEO_KATIGORII="КЛАСС";
     public static final String GEO_OPISANIE="ОПИСАНИЕ";
+    public static final String GEO_LIST="ЛИСТ";
 }

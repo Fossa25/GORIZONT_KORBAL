@@ -44,24 +44,38 @@ public class DatabaseHandler extends Configs {
         }
     }
 
-    public void DobavlenieGEOLOG(String kategoriya,  String opisanie,String dlina,String gorizont, String nazvanie,String tippas,String primihanie) {
-        String query = "UPDATE " + Const.BAZA_TABLE + " SET " + Const.BAZA_KATIGORII + " = ?, "
-                       + Const.BAZA_OPISANIE + " = ?, "  + Const.BAZA_DLINA + " = ?, "+   Const.BAZA_TIPPAS + " = ?, "+Const.BAZA_PRIM + " = ? "+ "WHERE "
+    public void DobavlenieGEOLOG(String gorizont, String nazvanie,String tippas,String primihanie) {
+        String query = "UPDATE " + Const.BAZA_TABLE + " SET " +  Const.BAZA_TIPPAS + " = ?, "+Const.BAZA_PRIM + " = ? "+ "WHERE "
                        + Const.BAZA_GORIZONT + " = ? AND " + Const.BAZA_NAZVANIE + " = ?";
+
+        try (Connection connection = getDbConnection();
+             PreparedStatement prSt = connection.prepareStatement(query)) {
+
+            prSt.setString(1, tippas);
+            prSt.setString(2, primihanie);
+            prSt.setString(3, gorizont);
+            prSt.setString(4, nazvanie);
+
+            prSt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Ошибка обновления данных: " + e.getMessage(), e);
+        }
+    }
+    public void DobavlenieGEOLOG_SOPR(String kategoriya,  String opisanie,String gorizont, String nazvanie,String tippas,String primihanie) {
+        String query = "UPDATE " + Const.BAZA_TABLE + " SET " + Const.BAZA_KATIGORII + " = ?, "
+                + Const.BAZA_OPISANIE + " = ?, " +  Const.BAZA_TIPPAS + " = ?, "+Const.BAZA_PRIM + " = ? "+ "WHERE "
+                + Const.BAZA_GORIZONT + " = ? AND " + Const.BAZA_NAZVANIE + " = ?";
 
         try (Connection connection = getDbConnection();
              PreparedStatement prSt = connection.prepareStatement(query)) {
 
             prSt.setString(1, kategoriya);
             prSt.setString(2, opisanie);
-
-
-            prSt.setString(3, dlina);
-
-            prSt.setString(4, tippas);
-            prSt.setString(5, primihanie);
-            prSt.setString(6, gorizont);
-            prSt.setString(7, nazvanie);
+            prSt.setString(3, tippas);
+            prSt.setString(4, primihanie);
+            prSt.setString(5, gorizont);
+            prSt.setString(6, nazvanie);
 
             prSt.executeUpdate();
         } catch (SQLException e) {
@@ -127,7 +141,7 @@ public class DatabaseHandler extends Configs {
     public void saveAllRows(List<Baza_Geolg> rows, String nomPas) {
         String insert = "INSERT INTO " + Const.GEO_TABLE + "(" + Const.GEO_NOMER +
                 "," + Const.GEO_OT + "," + Const.GEO_GO
-                + "," + Const.GEO_KATIGORII+ "," + Const.GEO_OPISANIE  + "," + Const.GEO_INTERVAL +  ")" + "VALUES(?,?,?,?,?,?)";
+                + "," + Const.GEO_KATIGORII+ "," + Const.GEO_OPISANIE  + "," + Const.GEO_INTERVAL +  "," + Const.GEO_LIST + ")" + "VALUES(?,?,?,?,?,?,?)";
         try (Connection connection = getDbConnection();
              PreparedStatement statement = connection.prepareStatement(insert)) {
 
@@ -142,6 +156,7 @@ public class DatabaseHandler extends Configs {
                 statement.setString(4, row.getcolumnKLASS());
                 statement.setString(5, row.getcolumnOPIS());
                 statement.setString(6, row.getcolumnOTDO());
+                statement.setString(7, row.getcolumnLIST());
                 statement.addBatch(); // Добавляем в пакет
             }
 
@@ -173,6 +188,7 @@ public class DatabaseHandler extends Configs {
                     row.setcolumnKLASS(resSet.getString(Const.GEO_KATIGORII));
                     row.setcolumnOPIS(resSet.getString(Const.GEO_OPISANIE));
                     row.setcolumnOTDO(resSet.getString(Const.GEO_INTERVAL));
+                    row.setcolumnLIST(resSet.getString(Const.GEO_LIST));
                     rows.add(row);
                 }
             }
