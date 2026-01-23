@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PehatCOD extends Configs {
-
     private static final Logger log = LogManager.getLogger(PehatCOD.class);
     private String Photosxemtefat;
     private String Photovidkrepi;
@@ -54,14 +53,9 @@ public class PehatCOD extends Configs {
     private String ankerPM2;
     private String ankerR2;
     List<String> soprigenii = Arrays.asList("11","12","13","14","15");
-
     List<String> ov2 = Arrays.asList(  "1", "5","11","17","21","27","30","33","36","39");
-
     List<String> zabutovka = Arrays.asList( "4","8","10","14","16","20","24","26");
-
-
     private static final Map<String, String> PLACEHOLDER_MAP;
-
     static {
         PLACEHOLDER_MAP = new HashMap<>();
         PLACEHOLDER_MAP.put("${nomer}", "nomer");
@@ -83,7 +77,6 @@ public class PehatCOD extends Configs {
         PLACEHOLDER_MAP.put("${obvid2}", "obvid2");
         PLACEHOLDER_MAP.put("${sxema}", "sxema");
     }
-
     @FXML private ImageView instr;
     @FXML private TextField cehen;
     @FXML private TextField bdname;
@@ -96,9 +89,7 @@ public class PehatCOD extends Configs {
     @FXML private Button singUpButtun;
     @FXML private TextField privazka;
     @FXML private TextField idi;
-
     @FXML private TextField ush;
-
     @FXML private TextField dlina;
     private final DatabaseHandler dbHandler = new DatabaseHandler();
     @FXML private TextArea primhanie;
@@ -160,8 +151,6 @@ public class PehatCOD extends Configs {
                 "Схема вентиляции не внесена","Обновить изображение схемы вентиляции");
 
         setupImageHandlers();
-
-
         singUpButtun.setVisible(false);
         instr.setOnMouseClicked(mouseEvent -> {OpenDok(Put_instr, "Инструкция_");});
     }
@@ -345,7 +334,6 @@ public class PehatCOD extends Configs {
         proverkaImageGeolg(Put + "/" + nomer.getText() + "/" + "Поперечный",PoperVKL,PoperVKLNe);
         proverkaImageGeolg(Put + "/" + nomer.getText() + "/" + "Продольный",ProdolVKL,ProdolVKLNe);
         try {
-            // Проверка полей по очереди
             StringBuilder errors = new StringBuilder();
             if (selectedGor == null || selectedGor.isEmpty()) {
                 errors.append("- Не выбран горизонт\n");
@@ -359,22 +347,18 @@ public class PehatCOD extends Configs {
             if (dlinaValue == null || dlinaValue.isEmpty()) {
                 errors.append("- Не заполнена длина выработки\n");
             }
-
             if (kategoriyaValue == null || kategoriyaValue.isEmpty()) {
                 errors.append("- Не заполнено поле категория \n");
             }
             if (opisanieValue == null || opisanieValue.isEmpty()) {
                 errors.append("- Не заполнено поле описание\n");
             }
-
             if (sxemaVNS.isVisible() || sxemaVNSNE.isVisible()) {
                 errors.append("- Не внесена схема вентиляции\n");
             }
             if (geomexops == null || geomexops.isEmpty()) {
                 errors.append("- Не заполнено поле геомеханическое обоснование \n");
             }
-
-            // Если есть ошибки - показываем их
             if (errors.length() > 0) {
                 showAlert("Заполните обязательные поля:\n" + errors.toString());
                 return;
@@ -386,7 +370,6 @@ public class PehatCOD extends Configs {
                 this.Photosxemtefat = getUstanovka_SOPR(nomer1.getText());
                 this.Photoilement = getIlement_SOPR(nomer1.getText());
                 this.Photosxemprovet = getPoto(Put + "/" + nomer.getText() + "/" + "Схема", 0);
-
             } else {
                 this.Photovidkrepi = getRESURS(HABLON_PATH_VID, vidkripi);
               if  (ov2.contains(nomer1.getText())) {
@@ -398,7 +381,6 @@ public class PehatCOD extends Configs {
                 this.Photoilement = getIlement(nomer1.getText());
                 this.Photosxemprovet = getPoto(Put + "/" + nomer.getText() + "/" + "Схема", 0);
             }
-
             try {
                 if (validateInput()) {
                     generateWordDocument(
@@ -438,13 +420,11 @@ public class PehatCOD extends Configs {
         }
         return true;
     }
-
     private void rashet(String list) throws ParseException {
         // Проверка входных данных
         if (list == null || list.isEmpty()) {
             throw new IllegalArgumentException("Значение list не может быть пустым");
         }
-
         if (dlina.getText() == null || dlina.getText().trim().isEmpty()) {
             throw new ParseException("Значение длины не может быть пустым", 0);
         }
@@ -454,8 +434,6 @@ public class PehatCOD extends Configs {
             case "20" -> setTabl(1.33, 13.7, 3.4);
             case "8", "10", "24","26" -> setTabl(1.33, 0.0, 1.6);
             case "14","16"  -> setTabl(1.0, 0.0, 1.4);
-
-
             case "1" -> setTabl(8.0, 7.4, 9.0);
             case "5","17" -> setTabl(7.0, 6.4, 8.0);
             case "11" -> setTabl(6.0, 5.4, 7.0);
@@ -463,10 +441,8 @@ public class PehatCOD extends Configs {
             case "27","33","39" -> setTabl(10.0, 9.4, 11.0);
             case "30" -> setTabl(8.0, 7.4, 8.0);
             case "36" -> setTabl(9.0, 8.4, 10.0);
-
             case "9" -> setTabl(13.8, 12.3, 0.0);
             case "15","25" -> setTabl(13.8, 8.4, 0.0);
-
             case "7" -> setTabl(18.6, 8.8, 0.66);
             case "13" -> setTabl(18.6, 8.8, 0.61);
             case "23" -> setTabl(18.6, 8.8, 0.65);
@@ -489,8 +465,6 @@ public class PehatCOD extends Configs {
                 double ankerPM_Dobl = Double.parseDouble(this.ankerPM);
                 double setkaPM_Dobl = Double.parseDouble(this.setkaPM);
                 double torkretPM_Dobl = Double.parseDouble(this.torkretPM);
-
-
 
                 double ankerR_Doble = dlina_Dobl * ankerPM_Dobl;
                 double setkaR_Doble = dlina_Dobl * setkaPM_Dobl;
@@ -522,7 +496,6 @@ public class PehatCOD extends Configs {
                 throw new ParseException("Некорректный числовой формат", 0);
             }
         }else{
-
         try {
             double dlina_Dobl = Double.parseDouble(input);
             double ankerPM_Dobl = Double.parseDouble(this.ankerPM);
@@ -533,7 +506,6 @@ public class PehatCOD extends Configs {
             double setkaR_Doble = dlina_Dobl * setkaPM_Dobl;
             double torkretR_Doble = dlina_Dobl * torkretPM_Dobl;
             double ampulaR_Doble = dlina_Dobl * ampulaPM_Dobl;
-
             if (ov2.contains(nomer1.getText())) {
                 this.torkretR = String.format(Locale.US, "%.0f", Math.ceil( torkretR_Doble));
             }else{  this.torkretR = String.format(Locale.US, "%.1f", torkretR_Doble);}
@@ -562,7 +534,6 @@ public class PehatCOD extends Configs {
         this.ankerPM = String.valueOf(rama);
         this.setkaPM = String.valueOf(stoki);
         this.torkretPM = String.valueOf(verx);
-
         this.ankerR = String.valueOf(svaz);
         this.setkaR = String.valueOf(zamok);
         this.torkretR = String.valueOf(rask);
@@ -574,7 +545,6 @@ public class PehatCOD extends Configs {
         if (list == null || list.isEmpty()) {
             throw new IllegalArgumentException("Значение list не может быть пустым");
         }
-
         switch (list) {
             case "1" -> setTabl(256.0, 207.8, 0.0);
             case "11" -> setTabl(270.0, 188.1, 0.0);
@@ -601,15 +571,11 @@ public class PehatCOD extends Configs {
         }
     }
 
-
     private void generateWordDocument(String... params) throws IOException, InvalidFormatException, ParseException {
-
         if (soprigenii.contains(idi.getText())) {
             rashet_SOPR(nomer1.getText());
-
         } else {
             rashet(nomer1.getText());
-
         }
         Map<String, String> tableData = new HashMap<>();
         tableData.put("${table.ankPM}", this.ankerPM);
@@ -803,14 +769,11 @@ public class PehatCOD extends Configs {
             case "kategorii" -> values[3];
             case "opisanie" -> values[4];
             case "privazka" -> values[5];
-
             case "plan" -> values[6];
             case "poper" -> values[7];
             case "prodol" -> values[8];
-
             case "dlina" -> values[9];
             case "tipovoi" -> values[10];
-
             case "sxematexfakt" -> values[11];
             case "obvid" -> values[12];
             case "konstrk" -> values[13];
@@ -870,7 +833,6 @@ public class PehatCOD extends Configs {
         }
         return PictureData.PictureType.JPEG; // fallback
     }
-
     // Определение типа изображения
     private PictureData.PictureType getImageType(String imagePath) {
         String ext = imagePath.substring(imagePath.lastIndexOf(".") + 1).toLowerCase();
@@ -899,11 +861,9 @@ public class PehatCOD extends Configs {
             case "9", "15", "25"-> getRESURS(HABLON_PATH_USTANOVKA, "2.jpg");
             case "3",  "7", "13", "19", "23", "29", "32", "35","38","41" ->
                     getRESURS(HABLON_PATH_USTANOVKA, "3.jpg");
-
             case "4", "8","14","20","24" -> getRESURS(HABLON_PATH_USTANOVKA, "4.jpg");
             case "10", "26" -> getRESURS(HABLON_PATH_USTANOVKA, "5.jpg");
             case "16" -> getRESURS(HABLON_PATH_USTANOVKA, "6.jpg");
-
             default -> "";
         };
     }
@@ -918,41 +878,34 @@ public class PehatCOD extends Configs {
             default -> "";
         };
     }
-
     public String getIlement(String list) {
 
         return switch (list) {
 
             case "1", "3", "5", "7", "9", "11", "13",  "15", "17", "19", "21", "23", "25",
                  "27", "29", "30", "32","33","35","36","38","39","41" -> getRESURS(HABLON_PATH_ILIMENT, "1.jpg");
-
             case "4", "8", "14","20","24" -> getRESURS(HABLON_PATH_ILIMENT, "2.jpg");
             case "10", "16", "26" -> getRESURS(HABLON_PATH_ILIMENT, "3.jpg");
-
-
             default -> "";
         };
     }
     public String getIlement_SOPR(String list) {
-
         return switch (list) {
             case "4","6","8","10" -> getRESURS(HABLON_PATH_ILIMENT, "3.jpg");
             case "1","2","3","5","7","9","11","12","13","14" -> getRESURS(HABLON_PATH_ILIMENT, "4.jpg");
             default -> "";
         };
     }
-
     public TemplateResource getDokHablon(String list) {
         return switch (list) {
             case "9","15","25" -> new TemplateResource(getClass().getResourceAsStream(TEMPLATE_PATH1), TEMPLATE_PATH1);
-
             case "3", "7", "13", "19", "23", "29", "32", "35", "38", "41" ->
                     new TemplateResource(getClass().getResourceAsStream(TEMPLATE_PATH2), TEMPLATE_PATH2);
             case "4",  "20" -> new TemplateResource(getClass().getResourceAsStream(TEMPLATE_PATH3), TEMPLATE_PATH3);
             case  "8", "10", "14", "16", "24","26" ->
                     new TemplateResource(getClass().getResourceAsStream(TEMPLATE_PATH4), TEMPLATE_PATH4);
-
-            case "1", "5","11","17","21","27","30","33","36","39" -> new TemplateResource(getClass().getResourceAsStream(TEMPLATE_PATH8), TEMPLATE_PATH8);
+            case "1", "5","11","17","21","27","30","33","36","39"
+                    -> new TemplateResource(getClass().getResourceAsStream(TEMPLATE_PATH8), TEMPLATE_PATH8);
             default -> null;
         };
     }
@@ -960,7 +913,6 @@ public class PehatCOD extends Configs {
     public TemplateResource getDokHablon_SOPR(String list) {
         return switch (list) {
             case "1","5","9","11","13" -> new TemplateResource(getClass().getResourceAsStream(TEMPLATE_PATH5), TEMPLATE_PATH5);
-
             case  "2","3","7","12","14"  -> new TemplateResource(getClass().getResourceAsStream(TEMPLATE_PATH6), TEMPLATE_PATH6);
             case "4","6","8","10" -> new TemplateResource(getClass().getResourceAsStream(TEMPLATE_PATH7), TEMPLATE_PATH7);
             default ->null;
@@ -999,7 +951,6 @@ public class PehatCOD extends Configs {
         }
     }
    private void setupImageHandlers() {
-
         openImageHandler(PlanVKL, "План",PlanVKLNe,nomer.getText());
         openImageHandler(PoperVKL, "Поперечный",PoperVKLNe,nomer.getText());
         openImageHandler(ProdolVKL, "Продольный",ProdolVKLNe,nomer.getText());
@@ -1007,18 +958,11 @@ public class PehatCOD extends Configs {
          openImageHandler(sxemaVKL, "Схема", sxemaVKLNe,nomer.getText());
         obnovaImageHandler(sxemaobnov, "Схема", nomer.getText());
         sozdaniiImageHandler(sxemaVNS, "Схема", sxemaVKL, sxemaVKLNe, sxemaVNS, sxemaobnov, sxemaobnov,nomer.getText());
-
-
     }
-
-
-
     private void handleError(Exception e) {
         e.printStackTrace();
         showAlert( "Произошла ошибка: " + e.getMessage());
     }
-
-
      void proverkaImageGeolg(String imagePath,ImageView VKL,ImageView VKLNE) {
         File folder = new File(imagePath);
         // Проверяем, существует ли папка

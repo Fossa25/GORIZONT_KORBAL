@@ -37,11 +37,9 @@ public class GeomexCOD extends Configs {
     @FXML private Button singUpButtun;
     @FXML private TextField privazka;
     @FXML private TextField idi;
-
     @FXML private TextField dlina;
     private final DatabaseHandler dbHandler = new DatabaseHandler();
     @FXML private TextArea primhanie;
-
     List<String> soprigenii = Arrays.asList("11","12","13","14","15");
     @FXML private ImageView PlanVKL;
     @FXML private ImageView PlanVKLNe;
@@ -252,15 +250,10 @@ public class GeomexCOD extends Configs {
     }
 
    private void setupImageHandlers() {
-
         openImageHandler(PlanVKL, "План",PlanVKLNe,nomer.getText());
         openImageHandler(PoperVKL, "Поперечный",PoperVKLNe,nomer.getText());
         openImageHandler(ProdolVKL, "Продольный",ProdolVKLNe,nomer.getText());
-
     }
-
-
-
      void proverkaImageGeolg(String imagePath,ImageView VKL,ImageView VKLNE) {
         File folder = new File(imagePath);
         // Проверяем, существует ли папка
