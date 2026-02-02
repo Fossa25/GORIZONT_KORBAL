@@ -5,6 +5,8 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -69,7 +71,7 @@
             <Font name="Verdana" size="14.0" />
          </font>
       </TextField>
-        <Button fx:id="singUpButtun1" layoutX="798.0" layoutY="689.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="193.0" style="-fx-background-color: #aa9455; -fx-background-radius: 20px;" text="Сохранить примечание" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+        <Button fx:id="singUpButtun1" layoutX="796.0" layoutY="620.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="193.0" style="-fx-background-color: #aa9455; -fx-background-radius: 20px;" text="Сохранить примечание" textAlignment="CENTER" textFill="WHITE" wrapText="true">
             <font>
                 <Font name="Verdana" size="14.0" />
             </font>
@@ -212,6 +214,11 @@
                   <Image url="@assets/MarN.jpg" />
                </image>
             </ImageView>
+            <TextField fx:id="iterval" layoutX="32.0" layoutY="110.0" prefHeight="43.0" prefWidth="139.0" promptText="iter">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
          </children>
       </AnchorPane>
       <TextArea fx:id="tfopis" editable="false" layoutX="506.0" layoutY="258.0" prefHeight="45.0" prefWidth="484.0" promptText="ГЕОМЕХАНИЧЕСКОЕ ОБОСНОВАНИЕ(УКАЗАНИЕ)">
@@ -219,5 +226,24 @@
             <Font name="Verdana" size="14.0" />
          </font>
       </TextArea>
+      <AnchorPane fx:id="MENU_TABL" layoutX="-2.0" layoutY="795.0" prefHeight="200.0" prefWidth="1045.0">
+         <children>
+            <TableView fx:id="dataTable" prefHeight="167.0" prefWidth="1036.0">
+               <columns>
+                  <TableColumn fx:id="column1" prefWidth="108.0" text="ИНТЕРВАЛ" visible="true" />
+                  <TableColumn fx:id="column2" prefWidth="102.0" text="ГЕОЛГ. КЛАСС" />
+                  <TableColumn fx:id="column3" prefWidth="279.0" text="ОПИСАНИЕ" />
+                  <TableColumn fx:id="column4" prefWidth="114.0" text="ТЕХ.ФАКТОР" />
+                  <TableColumn fx:id="column5" prefWidth="327.0" text="ОПИСАНИЕ ТФ" />
+                  <TableColumn fx:id="column6" prefWidth="104.0" text="LIST" visible="true" />
+               </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+      <ImageView fx:id="tabl" fitHeight="61.0" fitWidth="58.0" layoutX="814.0" layoutY="703.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/BDA.jpg" />
+         </image>
+      </ImageView>
     </children>
 </AnchorPane>

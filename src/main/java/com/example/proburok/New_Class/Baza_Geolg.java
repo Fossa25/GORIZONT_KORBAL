@@ -9,8 +9,10 @@ public class Baza_Geolg {
     private String columnKLASS;
     private String columnOPIS;
     private String columnLIST;
+    private String columnFAKTOR;
+    private String columnFAKTOR_TEXT;
 
-    public Baza_Geolg(String col1, String col2, String col3, String col4, String col5, String col6, String col7) {
+    public Baza_Geolg(String col1, String col2, String col3, String col4, String col5, String col6, String col7, String col8, String col9) {
         this.NOM_PAS = col1;
         this.columnOTDO = col2;
         this.columnOT = col3;
@@ -18,6 +20,8 @@ public class Baza_Geolg {
         this.columnKLASS = col5;
         this.columnOPIS = col6;
         this.columnLIST = col7;
+        this.columnFAKTOR= col8;
+        this.columnFAKTOR_TEXT= col9;
     }
     @Override
     public String toString() {
@@ -75,4 +79,19 @@ public class Baza_Geolg {
         this. columnLIST =  columnLIST;
     }
 
+    public String getColumnFAKTOR() {
+        return columnFAKTOR;
+    }
+
+    public void setColumnFAKTOR(String columnFAKTOR) {
+        this.columnFAKTOR = columnFAKTOR;
+    }
+
+    public String getColumnFAKTOR_TEXT() {
+        return columnFAKTOR_TEXT;
+    }
+
+    public void setColumnFAKTOR_TEXT(String columnFAKTOR_TEXT) {
+        this.columnFAKTOR_TEXT = columnFAKTOR_TEXT;
+    }
 }
