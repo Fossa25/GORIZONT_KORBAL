@@ -119,16 +119,16 @@ public class DatabaseHandler extends Configs {
             throw new RuntimeException("Ошибка обновления данных: " + e.getMessage(), e);
         }
     }
-    public void DobavlenieGEOMEX(String faktor, String gorizont, String nazvanie,String primihanie) {
-        String query = "UPDATE " + Const.BAZA_TABLE + " SET " + Const.BAZA_FAKTOR + " = ?, " + Const.BAZA_PRIM + " = ? "+ "WHERE " + Const.BAZA_GORIZONT + " = ? AND " + Const.BAZA_NAZVANIE + " = ?";
+    public void DobavlenieGEOMEX(String faktor, String text_fak, String nomer,String iter) {
+        String query = "UPDATE " + Const.GEO_TABLE + " SET " + Const.GEO_FATOR + " = ?, " + Const.GEO_FAKTOR_TEXT + " = ? "+ "WHERE " + Const.GEO_NOMER + " = ? AND " + Const.GEO_INTERVAL + " = ?";
 
         try (Connection connection = getDbConnection();
              PreparedStatement prSt = connection.prepareStatement(query)) {
 
             prSt.setString(1, faktor);
-            prSt.setString(2, primihanie);
-            prSt.setString(3, gorizont);
-            prSt.setString(4, nazvanie);
+            prSt.setString(2, text_fak);
+            prSt.setString(3, nomer);
+            prSt.setString(4, iter);
 
             prSt.executeUpdate();
         } catch (SQLException e) {
@@ -136,6 +136,23 @@ public class DatabaseHandler extends Configs {
             throw new RuntimeException("Ошибка обновления данных: " + e.getMessage(), e);
         }
     }
+//    public void DobavlenieGEOMEX(String faktor, String gorizont, String nazvanie,String primihanie) {
+//        String query = "UPDATE " + Const.BAZA_TABLE + " SET " + Const.BAZA_FAKTOR + " = ?, " + Const.BAZA_PRIM + " = ? "+ "WHERE " + Const.BAZA_GORIZONT + " = ? AND " + Const.BAZA_NAZVANIE + " = ?";
+//
+//        try (Connection connection = getDbConnection();
+//             PreparedStatement prSt = connection.prepareStatement(query)) {
+//
+//            prSt.setString(1, faktor);
+//            prSt.setString(2, primihanie);
+//            prSt.setString(3, gorizont);
+//            prSt.setString(4, nazvanie);
+//
+//            prSt.executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            throw new RuntimeException("Ошибка обновления данных: " + e.getMessage(), e);
+//        }
+//    }
 
 
     public void saveAllRows(List<Baza_Geolg> rows, String nomPas) {
@@ -170,34 +187,7 @@ public class DatabaseHandler extends Configs {
             e.printStackTrace();
         }
     }
-    public List<Baza_Geolg> getAllRows(String nomer) {
-        List<Baza_Geolg> rows = new ArrayList<>();
-        String select = "SELECT * FROM " + Const.GEO_TABLE + " WHERE " +
-                Const.GEO_NOMER + "=?";
 
-        try (Connection connection =  getDbConnection();
-             PreparedStatement prSt = connection.prepareStatement(select)) {  // что вставляем в БД
-            prSt.setString(1, nomer);
-
-            try (ResultSet resSet = prSt.executeQuery()) { //prSt.executeQuery-получаем даные из БД
-                while  (resSet.next()) {
-                    Baza_Geolg row = new Baza_Geolg();
-
-                    row.setcolumnOT(resSet.getString(Const.GEO_OT));
-                    row.setcolumnDO(resSet.getString(Const.GEO_GO));
-                    row.setcolumnKLASS(resSet.getString(Const.GEO_KATIGORII));
-                    row.setcolumnOPIS(resSet.getString(Const.GEO_OPISANIE));
-                    row.setcolumnOTDO(resSet.getString(Const.GEO_INTERVAL));
-                    row.setcolumnLIST(resSet.getString(Const.GEO_LIST));
-                    rows.add(row);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return rows;
-    }
     public void deleteRowsWithCheck(String nomPas) {
         // Сначала проверяем, есть ли такие данные
         String checkSql = "SELECT COUNT(*) FROM " + Const.GEO_TABLE +
@@ -314,6 +304,39 @@ public class DatabaseHandler extends Configs {
         }
         return bazas; // метод возвращает заполненный список
     }
+    public List<Baza_Geolg> getAllRows(String nomer) {
+        List<Baza_Geolg> rows = new ArrayList<>();
+        String select= "SELECT * FROM " + Const.GEO_TABLE + " WHERE " +
+                Const.GEO_NOMER + "=?";
+
+
+        try (Connection connection =  getDbConnection();
+             PreparedStatement prSt = connection.prepareStatement(select)) {  // что вставляем в БД
+            prSt.setString(1, nomer);
+
+            try (ResultSet resSet = prSt.executeQuery()) { //prSt.executeQuery-получаем даные из БД
+                while  (resSet.next()) {
+                    Baza_Geolg row = new Baza_Geolg();
+
+                    row.setcolumnOT(resSet.getString(Const.GEO_OT));
+                    row.setcolumnDO(resSet.getString(Const.GEO_GO));
+                    row.setcolumnKLASS(resSet.getString(Const.GEO_KATIGORII));
+                    row.setcolumnOPIS(resSet.getString(Const.GEO_OPISANIE));
+                    row.setcolumnOTDO(resSet.getString(Const.GEO_INTERVAL));
+                    row.setcolumnLIST(resSet.getString(Const.GEO_LIST));
+                    row.setColumnFAKTOR(resSet.getString(Const.GEO_FATOR));
+                    row.setColumnFAKTOR_TEXT(resSet.getString(Const.GEO_FAKTOR_TEXT));
+
+                    rows.add(row);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rows;
+    }
+
+
     public ObservableList<Baza> poiskName(String gor) {
         ObservableList<Baza> bazas = FXCollections.observableArrayList();
         String select = "SELECT * FROM " + Const.BAZA_TABLE + " WHERE " + Const.BAZA_GORIZONT + "=?";
@@ -337,7 +360,35 @@ public class DatabaseHandler extends Configs {
         }
         return bazas;
     }
+    public Baza_Geolg getAllGEOMEX(String nomer,String iterval) {
 
+        String select= "SELECT * FROM " + Const.GEO_TABLE + " WHERE " +
+                Const.GEO_NOMER + "=? AND " + Const.GEO_INTERVAL + "=?";
+
+        try (Connection connection =  getDbConnection();
+             PreparedStatement prSt = connection.prepareStatement(select)) {  // что вставляем в БД
+            prSt.setString(1, nomer);
+            prSt.setString(2, iterval);
+
+            try (ResultSet resSet = prSt.executeQuery()) { //prSt.executeQuery-получаем даные из БД
+                while  (resSet.next()) {
+                    Baza_Geolg row = new Baza_Geolg();
+                    row.setcolumnOT(resSet.getString(Const.GEO_OT));
+                    row.setcolumnDO(resSet.getString(Const.GEO_GO));
+                    row.setcolumnKLASS(resSet.getString(Const.GEO_KATIGORII));
+                    row.setcolumnOPIS(resSet.getString(Const.GEO_OPISANIE));
+                    row.setcolumnOTDO(resSet.getString(Const.GEO_INTERVAL));
+                    row.setcolumnLIST(resSet.getString(Const.GEO_LIST));
+                    row.setColumnFAKTOR(resSet.getString(Const.GEO_FATOR));
+                    row.setColumnFAKTOR_TEXT(resSet.getString(Const.GEO_FAKTOR_TEXT));
+                    return row;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public Baza danii(String gor, String name) {
         String select = "SELECT * FROM " + Const.BAZA_TABLE + " WHERE " +
                 Const.BAZA_GORIZONT + "=? AND " + Const.BAZA_NAZVANIE + "=?"; // "SELECT * FROM " + Const.USER_TABLE  выбрать всё из этой базы  " WHERE " + Const.USER_USERNAME + "=? где конст равен чему то

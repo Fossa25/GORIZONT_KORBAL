@@ -2,12 +2,20 @@ package com.example.proburok.job;
 
 import com.example.proburok.New_Class.Baza;
 import com.example.proburok.MQ.DatabaseHandler;
+import com.example.proburok.New_Class.Baza_Geolg;
 import com.example.proburok.New_Class.TemplateResource;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.geometry.Point2D;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Popup;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -19,6 +27,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
+import org.apache.xmlbeans.XmlObject;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTRow;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTHdrFtr;
 
 import java.awt.*;
 import java.io.*;
@@ -109,8 +120,40 @@ public class PehatCOD extends Configs {
     @FXML private ImageView ProdolVKL;
     @FXML private ImageView ProdolVKLNe;
     @FXML private TextArea tfopis;
+    @FXML private TextField iterval;
+
+    @FXML private AnchorPane MENU_TABL;
+    @FXML private ImageView tabl;
+    @FXML private TableView<ObservableList<StringProperty>> dataTable;
+    @FXML private TableColumn<ObservableList<StringProperty>, String>  column1;
+    @FXML private TableColumn<ObservableList<StringProperty>, String>  column2;
+    @FXML private TableColumn<ObservableList<StringProperty>, String> column3;
+    @FXML private TableColumn<ObservableList<StringProperty>, String> column4;
+    @FXML private TableColumn<ObservableList<StringProperty>, String> column5;
+    @FXML private TableColumn<ObservableList<StringProperty>, String> column6;
+    private Popup popup;
     @FXML
     void initialize() {
+        setupTable();
+        popup = new Popup();
+        popup.getContent().add(MENU_TABL);
+        // Обработчик для кнопки
+        tabl.setOnMouseClicked(e -> {
+            if (!popup.isShowing()) {
+                // Получаем экранные координаты кнопки
+                Point2D point = tabl.localToScreen(0, 0);
+
+                // Показываем popup рядом с кнопкой
+                popup.show(
+                        tabl.getScene().getWindow(),
+                        point.getX()-815, // справа от кнопки
+                        point.getY() -710
+                );
+            } else {
+                popup.hide();
+            }
+        });
+
         primhanie.visibleProperty().bind(cb.selectedProperty());
         singUpButtun1.visibleProperty().bind(cb.selectedProperty());
         idi.setVisible(false);
@@ -137,7 +180,7 @@ public class PehatCOD extends Configs {
                 clearFields();
                 //gorbox.setValue(null);
             } catch (Exception e) {
-                showAlert("Произошла ошибка: " + e.getMessage());
+                showAlert("Произошла ошибка1: " + e.getMessage());
             }
         });
         setupComboBoxes();
@@ -174,8 +217,10 @@ public class PehatCOD extends Configs {
             }
         });
         addTextChangeListener(nomer);addTextChangeListener(bdname);
-        addTextChangeListener(katigoria);addTextChangeListener(cehen);
-        addTextChangeListener(nomer1);addTextChangeListener(privazka);
+       // addTextChangeListener(katigoria);
+        addTextChangeListener(cehen);
+        addTextChangeListener(nomer1);
+        addTextChangeListener(privazka);
         addTextChangeListener(dlina);
     }
 
@@ -200,6 +245,17 @@ public class PehatCOD extends Configs {
         clearFields();
         namebox.setItems(names);
     }
+    private void populateFields(String horizon, String name) {
+        Baza data = dbHandler.danii(horizon, name);
+        if (data != null) {
+            updateUI(data);
+
+
+        } else {
+            clearFields();
+            singUpButtun.setVisible(false);
+        }
+    }
     private void updateUI(Baza data) {
         Platform.runLater(() -> {
             try {
@@ -221,7 +277,7 @@ public class PehatCOD extends Configs {
                 proverkaImageGeolg(Put + "/" + nomer.getText() + "/" + "Поперечный", PoperVKL, PoperVKLNe);
                 proverkaImageGeolg(Put + "/" + nomer.getText() + "/" + "Продольный", ProdolVKL, ProdolVKLNe);
                 proverkaImage(Put + "/" + nomer.getText() + "/" + "Схема", sxemaVNS, sxemaVNSNE, sxemaVKL, sxemaVKLNe, sxemaobnov);
-
+                loadDataFromDatabase(data.getNOMER());
                 // Проверяем заполненность полей
                 boolean allValid = validateRequiredFields();
                 singUpButtun.setVisible(allValid);
@@ -235,19 +291,27 @@ public class PehatCOD extends Configs {
                 showAlert("Ошибка при обновлении данных: " + e.getMessage());
             }
         });
+        ObservableList<String> names = FXCollections.observableArrayList(
+                dbHandler.getAllRows(data.getNOMER()).stream()
+                        .map(Baza_Geolg::getcolumnOTDO)
+                        .distinct()
+                        .collect(Collectors.toList()));
+
+        iterval.setText(String.valueOf(names.size()));
+
     }
 
     private boolean validateRequiredFields() {
         return isFieldValid(nomer) &&
                 isFieldValid(bdname) &&
-                isFieldValid(katigoria) &&
+               // isFieldValid(katigoria) &&
                 isFieldValid(cehen) &&
                 isFieldValid(nomer1) &&
                 isFieldValid(dlina) &&
                 isFieldValid(ush) &&
-                isAraidValid(tfopis) &&
-                isFieldValid(privazka)&&
-                isPrimValid(primhanie.getText());
+              //  isAraidValid(tfopis) &&
+                isFieldValid(privazka);
+              //  isPrimValid(primhanie.getText());
     }
     private boolean isFieldValid(TextField field) {
         return field != null && field.getText() != null && !field.getText().trim().isEmpty();
@@ -265,51 +329,24 @@ public class PehatCOD extends Configs {
             default -> true;
         };
     }
-
-    private void populateFields(String horizon, String name) {
-        Baza data = dbHandler.danii(horizon, name);
-        if (data != null) {
-            updateUI(data);
-        } else {
-            clearFields();
-            singUpButtun.setVisible(false);
-        }
-    }
     private void clearFields() {
       //  namebox.setValue(null);
-        nomer.clear();
-        bdname.clear();
-        katigoria.clear();
-        opisanie.setText("");
-        cehen.clear();
-        nomer1.clear();
-        privazka.clear();
-        dlina.clear();
-        primhanie.clear();
-        cb.setSelected(false);
-        idi.clear();
-        ush.clear();
-        tfopis.clear();
-        this.Photosxemtefat = "";
-        this.Photovidkrepi = "";
-        this.Photoilement = "";
-        this.Photosxemprovet = "";
-        this.Photovidkrepi2 = "";
-        this.ankerPM = "";
-        this.ankerR = "";
-        this.setkaPM = "";
-        this.setkaR = "";
-        this.torkretPM = "";
-        this.torkretR = "";
-        this.ampulaPM = "";
-        this.ampulaR = "";
-        this.smesPM = "";
-        this.smesR = "";
+        nomer.clear();bdname.clear();
+        katigoria.clear();opisanie.setText("");
+        cehen.clear();nomer1.clear();
+        privazka.clear();dlina.clear();
+        primhanie.clear();cb.setSelected(false);
+        idi.clear();ush.clear();tfopis.clear();
+        this.Photosxemtefat = "";this.Photovidkrepi = "";
+        this.Photoilement = "";this.Photosxemprovet = "";this.Photovidkrepi2 = "";
+        this.ankerPM = "";this.ankerR = "";
+        this.setkaPM = "";this.setkaR = "";
+        this.torkretPM = "";this.torkretR = "";
+        this.ampulaPM = "";this.ampulaR = "";
+        this.smesPM = "";this.smesR = "";
         this.tolhina = "";
-        this.ankerPM1 = "";
-        this.ankerR1 = "";
-        this.ankerPM2 = "";
-        this.ankerR2 = "";
+        this.ankerPM1 = "";this.ankerR1 = "";
+        this.ankerPM2 = "";this.ankerR2 = "";
         proverkaImage(Put + "/" + nomer.getText() + "/" + "Схема", sxemaVNS, sxemaVNSNE, sxemaVKL, sxemaVKLNe, sxemaobnov);
         proverkaImageGeolg(Put + "/" + nomer.getText() + "/" + "План", PlanVKL,PlanVKLNe);
         proverkaImageGeolg(Put + "/" + nomer.getText() + "/" + "Поперечный",PoperVKL,PoperVKLNe);
@@ -409,7 +446,7 @@ public class PehatCOD extends Configs {
                 throw new RuntimeException(e);
             }
         } catch (Exception e) {
-           showAlert("Произошла ошибка: " + e.getMessage());
+           showAlert("Произошла ошибкаDOK: " + e.getMessage());
         }
     }
 
@@ -687,14 +724,17 @@ public class PehatCOD extends Configs {
     private void replacePlaceholders(XWPFDocument doc, String[] values) {
         // Списки плейсхолдеров для разных типов замен
         Set<String> textPlaceholders = Set.of(
-                "${nomer}", "${name}", "${gorizont}",
-                "${opisanie}", "${kategorii}", "${privazka}", "${tipovoi}", "${dlina}","${ukazanie}");
+                "${nomer}", "${name}", "${gorizont}"
+              ,  "${privazka}", "${tipovoi}", "${dlina}");
+        Set<String> ROW = Set.of(
+                "${opisanie}","${kategorii}","${ukazanie}","${obvid}","${obvid2}","${sxematexfakt}", "${konstrk}");
         Set<String> imagePlaceholders = Set.of("${plan}");
         Set<String> imagePlaceholders_2 = Set.of( "${poper}", "${prodol}");
         Set<String> imageSXPlaceholders = Set.of("${sxema}");
 
-        Set<String> VidhablonPlaceholders = Set.of("${obvid}","${obvid2}");
-        Set<String> SxmHablonPlaceholders = Set.of("${sxematexfakt}", "${konstrk}");
+        //Set<String> VidhablonPlaceholders = Set.of();
+       // Set<String> SxmHablonPlaceholders = Set.of();
+
         // Обработка текстовых плейсхолдеров
         textPlaceholders.forEach(placeholder -> {
             String fieldName = PLACEHOLDER_MAP.get(placeholder);
@@ -706,6 +746,7 @@ public class PehatCOD extends Configs {
                 }
             }
         });
+
         // Обработка плейсхолдеров изображений
         imagePlaceholders.forEach(placeholder -> {
             String fieldName = PLACEHOLDER_MAP.get(placeholder);
@@ -737,28 +778,66 @@ public class PehatCOD extends Configs {
                 }
             }
         });
+        List<XWPFParagraph> paragraphs = doc.getParagraphs();
+        for (int i = 0; i < paragraphs.size(); i++) {
+            XWPFParagraph p = paragraphs.get(i);
+            if (p.getText().contains("${opisanie}")) {
+                replaceROWInParagraph(doc,"${opisanie}",1,2,"Геологический класс устойчивости: ","Описание геологии: ");
+                // После замены уменьшаем i, так как количество параграфов изменилось
+                i--;
+                paragraphs = doc.getParagraphs(); // Обновляем список
+            }
+            if (p.getText().contains("${ukazanie}")) {
+                replaceROWInParagraph(doc,"${ukazanie}",3,4,"Технологические факторы: ","Описание факторов: ");
+                // После замены уменьшаем i, так как количество параграфов изменилось
+                i--;
+                paragraphs  = doc.getParagraphs(); // Обновляем список
+            }
+        }
+        List<XWPFParagraph> paragraphs1 = doc.getParagraphs();
+        for (int i = 0; i < paragraphs1.size(); i++) {
+            XWPFParagraph p = paragraphs1.get(i);
+            if (p.getText().contains("${obvid}")) {
+                replaceROWImage(doc,"${obvid}","Общий вид конструкции крепи в интервала: ",5,700, 420, true,1);
+                // После замены уменьшаем i, так как количество параграфов изменилось
+                i--;
+                paragraphs1 = doc.getParagraphs(); // Обновляем список
+            }
+            if (p.getText().contains("${konstrk}")) {
+                replaceROWImage(doc,"${konstrk}","Конструкция элементов крепи (детали, узлы) в интервала: ",5,470, 730, true,2);
+                // После замены уменьшаем i, так как количество параграфов изменилось
+                i--;
+                paragraphs1 = doc.getParagraphs(); // Обновляем список
+            }
+            if (p.getText().contains("${sxematexfakt}")) {
+                replaceROWImage(doc,"${sxematexfakt}","Схема установки и возведения крепи, отставание крепления от забоя в интервала: ",5,470, 700, true,3);
+                // После замены уменьшаем i, так как количество параграфов изменилось
+                i--;
+                paragraphs1 = doc.getParagraphs(); // Обновляем список
+            }
+        }
 
-        VidhablonPlaceholders.forEach(placeholder -> {
-            String fieldName = PLACEHOLDER_MAP.get(placeholder);
-            for (XWPFParagraph p : doc.getParagraphs()) {
-                if (p.getText().contains(placeholder)) {
-                    String imagePath = getValueByFieldName(fieldName, values);
-                    System.out.println("[Vid] Замена " + placeholder + " → " + imagePath);
-                    replaceImageInParagraph(p, placeholder, imagePath, 700, 420, true);
-                }
-            }
-        });
-        SxmHablonPlaceholders.forEach(placeholder -> {
-            String fieldName = PLACEHOLDER_MAP.get(placeholder);
-            for (XWPFParagraph p : doc.getParagraphs()) {
-                if (p.getText().contains(placeholder)) {
-                    String imagePath = getValueByFieldName(fieldName, values);
-                    System.out.println("[Sxm] Замена " + placeholder + " → " + imagePath);
-                    //replaceTextInParagraph(p, placeholder, "");
-                    replaceImageInParagraph(p, placeholder, imagePath, 470, 700, true);
-                }
-            }
-        });
+//        VidhablonPlaceholders.forEach(placeholder -> {
+//            String fieldName = PLACEHOLDER_MAP.get(placeholder);
+//            for (XWPFParagraph p : doc.getParagraphs()) {
+//                if (p.getText().contains(placeholder)) {
+//                    String imagePath = getValueByFieldName(fieldName, values);
+//                    System.out.println("[Vid] Замена " + placeholder + " → " + imagePath);
+//                    replaceImageInParagraph(p, placeholder, imagePath, 700, 420, true);
+//                }
+//            }
+//        });
+//        SxmHablonPlaceholders.forEach(placeholder -> {
+//            String fieldName = PLACEHOLDER_MAP.get(placeholder);
+//            for (XWPFParagraph p : doc.getParagraphs()) {
+//                if (p.getText().contains(placeholder)) {
+//                    String imagePath = getValueByFieldName(fieldName, values);
+//                    System.out.println("[Sxm] Замена " + placeholder + " → " + imagePath);
+//                    //replaceTextInParagraph(p, placeholder, "");
+//                    replaceImageInParagraph(p, placeholder, imagePath, 470, 700, true);
+//                }
+//            }
+//        });
     }
 
     private String getValueByFieldName(String name, String[] values) {
@@ -791,6 +870,154 @@ public class PehatCOD extends Configs {
         String safeReplacement = replacement != null ? replacement : "";
         newRun.setText(text.replace(placeholder, safeReplacement));// заменяем "${nomer}", "123",
     }
+
+    private void replaceROWInParagraph(XWPFDocument doc,String paragraf,int colum2_int,int colum3_int,String text_2,String text_3) {
+        try {
+            List<XWPFParagraph> paragraphs = doc.getParagraphs();
+            for (XWPFParagraph p : paragraphs) {
+                if (p.getText().contains(paragraf)) {
+                    // Очищаем параграф
+                    while (p.getRuns().size() > 0) {
+                        p.removeRun(0);
+                    }
+                    // Добавляем каждую строку таблицы как отдельный блок
+                    for (int rowIndex = 0; rowIndex < dataTable.getItems().size(); rowIndex++) {
+                        ObservableList<StringProperty> tableRow = dataTable.getItems().get(rowIndex);
+
+                        String intervalValue = getSafeTableValue(tableRow, 0);
+                        String kategoriValue = getSafeTableValue(tableRow, colum2_int);
+                        String opisanieValue = getSafeTableValue(tableRow, colum3_int);
+
+                        if (!intervalValue.isEmpty() || !kategoriValue.isEmpty() || !opisanieValue.isEmpty()) {
+                            // Первая строка: интервал
+                            XWPFRun run1 = p.createRun();
+                            run1.setText("Для интервала: " + intervalValue);
+                            run1.setFontFamily("Times New Roman");
+                            run1.setFontSize(12);
+                            run1.setBold(true);
+                            // Вторая строка: класс
+                            XWPFRun run2 = p.createRun();
+                            run2.addBreak(); // Перенос перед второй строкой
+                            run2.setText(text_2+ "« " + kategoriValue + " »"+".");
+                            run2.setFontFamily("Times New Roman");
+                            run2.setFontSize(12);
+                            // Третья строка: описание
+                            XWPFRun run3 = p.createRun();
+                            run3.addBreak(); // Перенос перед третьей строкой
+                            run3.setText(text_3 + opisanieValue);
+                            run2.setFontFamily("Times New Roman");
+                            run2.setFontSize(12);
+                            // Добавляем пустую строку между записями (кроме последней)
+                            if (rowIndex < dataTable.getItems().size() - 1) {
+                                XWPFRun emptyRun = p.createRun();
+                                emptyRun.addBreak(); // Перенос для пустой строки
+                                emptyRun.setText(""); // Пустой текст
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void replaceROWImage(XWPFDocument doc,String paragraf,String dop_text,int colum2_int,int width, int height, boolean isResource,int GetIm) {
+//        this.Photovidkrepi = getRESURS(HABLON_PATH_VID, vidkripi);
+//        if  (ov2.contains(nomer1.getText())) {
+//            int ps2 = Integer.parseInt(nomer1.getText())+1;
+//            String vidkripi2 = ps2 + ".jpg";
+//            this.Photovidkrepi2 = getRESURS(HABLON_PATH_VID, vidkripi2);
+//        }
+//        this.Photosxemtefat = getUstanovka(nomer1.getText());
+//        this.Photoilement = getIlement(nomer1.getText());
+//        this.Photosxemprovet = getPoto(Put + "/" + nomer.getText() + "/" + "Схема", 0);
+//    }
+        try {
+            List<XWPFParagraph> paragraphs = doc.getParagraphs();
+            for (XWPFParagraph p : paragraphs) {
+                if (p.getText().contains(paragraf)) {
+                    // Очищаем параграф
+                    while (p.getRuns().size() > 0) {
+                        p.removeRun(0);
+                    }
+                    // Добавляем каждую строку таблицы как отдельный блок
+                    for (int rowIndex = 0; rowIndex < dataTable.getItems().size(); rowIndex++) {
+                        ObservableList<StringProperty> tableRow = dataTable.getItems().get(rowIndex);
+
+                        String intervalValue = getSafeTableValue(tableRow, 0);
+                        String NomerListValue = getSafeTableValue(tableRow, colum2_int);
+                       String ImageObVid = "";
+                        if (GetIm==1){
+                            ImageObVid = getRESURS(HABLON_PATH_VID, NomerListValue+ ".jpg");
+                        }else if (GetIm==2){
+                            ImageObVid =getIlement(NomerListValue);
+                        }else if (GetIm==3){
+                            ImageObVid =getUstanovka(NomerListValue);
+                        }
+
+                        if (!intervalValue.isEmpty() || !NomerListValue.isEmpty()) {
+                            // Первая строка: интервал
+                            XWPFRun run1 = p.createRun();
+                           //"Общий вид конструкции крепи для интервала: "
+                            run1.setText(dop_text + intervalValue);
+                            run1.setFontFamily("Times New Roman");
+                            run1.setFontSize(12);
+                            run1.setBold(true);
+                            // Вторая строка: класс
+                            XWPFRun run2 = p.createRun();
+                            run2.addBreak(); // Перенос перед второй строкой
+
+                            if (ImageObVid == null || ImageObVid.isEmpty()) {
+                                System.err.println("Путь к изображению пуст");
+                                return;
+                            }
+                            try (InputStream is = isResource
+                                    ? getClass().getResourceAsStream(ImageObVid.startsWith("/") ? ImageObVid : "/" + ImageObVid)
+                                    : new FileInputStream(ImageObVid)) {
+                                if (is == null) {
+                                    System.err.println("Источник не найден: " + ImageObVid);
+                                    return;
+                                }
+                                byte[] imageBytes = IOUtils.toByteArray(is);
+                                PictureData.PictureType type = isResource
+                                        ? determineImageType(imageBytes)
+                                        : getImageType(ImageObVid);
+
+
+                                run2.addPicture(
+                                        new ByteArrayInputStream(imageBytes),
+                                        type.ordinal(),
+                                        "image",
+                                        Units.toEMU(width),
+                                        Units.toEMU(height)
+                                );
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            // Добавляем пустую строку между записями (кроме последней)
+                            if (rowIndex < dataTable.getItems().size() - 1) {
+                                XWPFRun emptyRun = p.createRun();
+                                emptyRun.addBreak(); // Перенос для пустой строки
+                                emptyRun.setText(""); // Пустой текст
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getSafeTableValue(ObservableList<StringProperty> row, int index) {
+        if (row == null || index < 0 || index >= row.size()) {
+            return "";
+        }
+        StringProperty cell = row.get(index);
+        return (cell != null && cell.get() != null) ? cell.get() : "";
+    }
+
 
     private void replaceImageInParagraph(XWPFParagraph p, String placeholder, String imagePath, int width, int height, boolean isResource) {
         replaceTextInParagraph(p, placeholder, "");
@@ -845,9 +1072,7 @@ public class PehatCOD extends Configs {
             default -> throw new IllegalArgumentException("Unsupported image type: " + ext);
         };
     }
-    // Сформируйте полный путь к ресурсу
     public String getRESURS(String resourcePath, String fileName) {
-        // Возвращаем путь в формате "/папка/файл"
         if (fileName == null) return "";
         return (resourcePath.startsWith("/") ? "" : "/") +
                 resourcePath.replace("\\", "/") +
@@ -994,4 +1219,100 @@ public class PehatCOD extends Configs {
             VKL.setVisible(false);VKLNE.setVisible(true);
         }
     }
+    private void loadDataFromDatabase(String nom) {
+        try {
+            DatabaseHandler tableDAO = new DatabaseHandler();
+            // Получаем данные из БД
+            List<Baza_Geolg> rows = tableDAO.getAllRows(nom);
+
+            // Очищаем таблицу
+            dataTable.getItems().clear();
+            ObservableList<ObservableList<StringProperty>> items = dataTable.getItems();
+            // Заполняем таблицу данными из БД
+            for (Baza_Geolg row : rows) {
+                ObservableList<StringProperty> tableRow = FXCollections.observableArrayList(
+                        new SimpleStringProperty(row.getcolumnOTDO()),
+                        new SimpleStringProperty( row.getcolumnKLASS()),
+                        new SimpleStringProperty(row.getcolumnOPIS()),
+                        new SimpleStringProperty(row.getColumnFAKTOR()),
+                        new SimpleStringProperty(row.getColumnFAKTOR_TEXT()),
+                        new SimpleStringProperty(row.getcolumnLIST())
+                );
+                dataTable.getItems().add(tableRow);
+            }
+        } catch (Exception e) {
+            showAlert( "Не удалось загрузить данные из БД: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
+    private void setupTable() {
+        // 1. Делаем таблицу редактируемой
+        dataTable.setEditable(true);
+        // 2. Настраиваем, как данные извлекаются для каждого столбца
+        setupCellValueFactories();
+        // 3. Настраиваем редактирование ячеек
+        setupCellEditing();
+
+    }
+    private void setupCellValueFactories() {
+        // Столбец 1: берет значение из первой ячейки строки
+        column1.setCellValueFactory(param -> {
+            // param.getValue() - получаем всю строку (ObservableList<StringProperty>)
+            ObservableList<StringProperty> row = param.getValue();
+            // Если в строке есть хотя бы 1 элемент, возвращаем его значение
+            // Если нет - возвращаем пустую строку
+            if (row.size() > 0) {
+                return row.get(0);  // StringProperty первой ячейки
+            } else {
+                return new SimpleStringProperty("");  // Пустая строка
+            }
+        });
+
+        // Аналогично для остальных столбцов
+        column2.setCellValueFactory(param -> {
+            ObservableList<StringProperty> row = param.getValue();
+            return row.size() > 1 ? row.get(1) : new SimpleStringProperty("");
+        });
+        column3.setCellValueFactory(param -> {
+            ObservableList<StringProperty> row = param.getValue();
+            return row.size() > 2 ? row.get(2) : new SimpleStringProperty("");
+        });
+        column4.setCellValueFactory(param -> {
+            ObservableList<StringProperty> row = param.getValue();
+            return row.size() > 3 ? row.get(3) : new SimpleStringProperty("");
+        });
+        column5.setCellValueFactory(param -> {
+            ObservableList<StringProperty> row = param.getValue();
+            return row.size() > 4 ? row.get(4) : new SimpleStringProperty("");
+        });
+        column6.setCellValueFactory(param -> {
+            ObservableList<StringProperty> row = param.getValue();
+            return row.size() > 5 ? row.get(5) : new SimpleStringProperty("");
+        });
+    }
+
+    private void setupCellEditing() {
+        // Для каждого столбца настраиваем возможность редактирования
+        setupColumnForEditing(column1, 0);
+        setupColumnForEditing(column2, 1);
+        setupColumnForEditing(column3, 2);
+        setupColumnForEditing(column4, 3);
+        setupColumnForEditing(column5, 4);
+        setupColumnForEditing(column6, 5);
+    }
+
+    private void setupColumnForEditing(TableColumn<ObservableList<StringProperty>, String> column,
+                                       int columnIndex) {
+
+        column.setCellFactory(TextFieldTableCell.forTableColumn());
+        column.setOnEditCommit(event -> {
+            ObservableList<StringProperty> row = event.getRowValue();
+            String newValue = event.getNewValue();
+            if (row.size() > columnIndex) {
+                row.get(columnIndex).set(newValue);
+            }
+        });
+    }
+
+
+}

@@ -41,13 +41,9 @@ public class GeologCOD extends Configs {
 
     @FXML private TextField OSTATOK;
     @FXML private TableView<ObservableList<StringProperty>> dataTable;
-
     @FXML private TableColumn<ObservableList<StringProperty>, String>  column1;
-
     @FXML private TableColumn<ObservableList<StringProperty>, String>  column2;
-
     @FXML private TableColumn<ObservableList<StringProperty>, String> column3;
-
     @FXML private TableColumn<ObservableList<StringProperty>, String> column4;
     @FXML private TableColumn<ObservableList<StringProperty>, String> column5;
     @FXML private TableColumn<ObservableList<StringProperty>, String> column6;
@@ -750,8 +746,7 @@ public class GeologCOD extends Configs {
             } else {
                 row.setcolumnOTDO("");
             }
-
-            if (tableRow.size() > 6 && tableRow.get(6) != null) {
+            if (tableRow.size() > 5 && tableRow.get(6) != null) {
                 row.setcolumnLIST(tableRow.get(6).get());
             } else {
                 row.setcolumnLIST("");
